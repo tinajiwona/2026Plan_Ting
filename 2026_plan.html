@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年计划安排</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+        
+        .subsection {
+            margin-left: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+        
+        .subsection-title {
+            font-size: 1.3em;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .subsection-content {
+            color: #555;
+            line-height: 1.8;
+            font-size: 0.95em;
+        }
+        
+        .subsection-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .subsection-content li {
+            margin-bottom: 8px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .subsection-content li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .edit-note {
+            color: #999;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+            table-layout: fixed;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+            word-wrap: break-word;
+            min-height: 50px;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        #modifyTable th:nth-child(1) {
+            width: 35%;
+        }
+        
+        #modifyTable th:nth-child(2) {
+            width: 30%;
+        }
+        
+        #modifyTable th:nth-child(3) {
+            width: 35%;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .status-review-1 {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-review-2 {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-review-1-done {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-review-2-done {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .highlight {
+            display: inline-block;
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin: 4px 4px 4px 0;
+            font-size: 0.9em;
+        }
+        
+        .keywords {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background: #e7f3ff;
+            padding: 4px 8px;
+            border-radius: 3px;
+            margin-right: 8px;
+            margin-bottom: 4px;
+            color: #0066cc;
+        }
+        
+        .editable-cell {
+            cursor: pointer;
+            position: relative;
+            min-height: 20px;
+        }
+        
+        .editable-cell:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 3px;
+        }
+        
+        .editable-cell.editing {
+            background: white;
+        }
+        
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #667eea;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .edit-buttons {
+            margin-top: 8px;
+        }
+        
+        .edit-buttons button {
+            padding: 6px 12px;
+            margin-right: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .save-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background: #5568d3;
+        }
+        
+        .cancel-btn {
+            background: #999;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: #777;
+        }
+        
+        .add-row-btn {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .add-row-btn:hover {
+            background: #218838;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: 5px;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .row-actions {
+            text-align: center;
+            display: none;
+        }
+        
+        tbody tr:hover .row-actions {
+            display: block;
+        }
+        
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auto-save-indicator.show {
+            display: block;
+            animation: fadeInOut 2s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .section-title {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页面标题 -->
+        <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1>📋 2026年计划安排</h1>
+                <p>让我们一起规划美好的2026年- 姜婷</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="switchLanguage('zh')" class="lang-active" style="padding: 8px 15px; background: white; color: #667eea; border: 2px solid white; border-radius: 5px; cursor: pointer; font-weight: 600;">中文</button>
+                <button onclick="switchLanguage('en')" style="padding: 8px 15px; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 5px; cursor: pointer; font-weight: 600;">English</button>
+            </div>
+        </div>
+        
+        <!-- 自动保存提示 -->
+        <div class="auto-save-indicator">✓ 已自动保存</div>
+        
+        <!-- 主要内容 -->
+        <div class="content">
+            
+            <!-- 论文计划 -->
+            <div class="section">
+                <div class="section-title">📚 论文计划</div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">📝 论文修改计划</div>
+                    <div class="subsection-content">
+                        <table id="modifyTable">
+                            <thead>
+                                <tr>
+                                    <th>论文名</th>
+                                    <th>论文状态</th>
+                                    <th>时间</th>
+                                    <th style="width: 60px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="modify-0-name">待填写</td>
+                                    <td><span class="editable-cell status-badge status-review-1" data-key="modify-0-status" data-type="select">一审Under Review</span></td>
+                                    <td class="editable-cell" data-key="modify-0-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="modify-1-name">待填写</td>
+                                    <td><span class="editable-cell status-badge status-review-2" data-key="modify-1-status" data-type="select">二审Under Review</span></td>
+                                    <td class="editable-cell" data-key="modify-1-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="modify-2-name">待填写</td>
+                                    <td><span class="editable-cell status-badge status-review-1-done" data-key="modify-2-status" data-type="select">一审结束</span></td>
+                                    <td class="editable-cell" data-key="modify-2-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addTableRow('modifyTable', 'modify')">+ 添加行</button>
+                        <div class="edit-note">💡 点击单元格即可编辑，自动保存 | 状态选项：一审Under Review、二审Under Review、一审结束、二审结束</div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">✍️ 论文撰写计划</div>
+                    <div class="subsection-content">
+                        <table id="writeTable">
+                            <thead>
+                                <tr>
+                                    <th>论文名 & 关键信息</th>
+                                    <th>时间安排</th>
+                                    <th style="width: 60px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div><strong class="editable-cell" data-key="write-0-name">待填写</strong></div>
+                                        <div class="editable-cell highlight" data-key="write-0-highlight">高亮内容示例</div>
+                                        <div class="keywords" data-key="write-0-keywords">
+                                            <span class="keyword-tag">关键词1</span>
+                                            <span class="keyword-tag">关键词2</span>
+                                            <span class="keyword-tag">关键词3</span>
+                                        </div>
+                                    </td>
+                                    <td class="editable-cell" data-key="write-0-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><strong class="editable-cell" data-key="write-1-name">待填写</strong></div>
+                                        <div class="editable-cell highlight" data-key="write-1-highlight">高亮内容示例</div>
+                                        <div class="keywords" data-key="write-1-keywords">
+                                            <span class="keyword-tag">关键词1</span>
+                                            <span class="keyword-tag">关键词2</span>
+                                            <span class="keyword-tag">关键词3</span>
+                                        </div>
+                                    </td>
+                                    <td class="editable-cell" data-key="write-1-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><strong class="editable-cell" data-key="write-2-name">待填写</strong></div>
+                                        <div class="editable-cell highlight" data-key="write-2-highlight">高亮内容示例</div>
+                                        <div class="keywords" data-key="write-2-keywords">
+                                            <span class="keyword-tag">关键词1</span>
+                                            <span class="keyword-tag">关键词2</span>
+                                            <span class="keyword-tag">关键词3</span>
+                                        </div>
+                                    </td>
+                                    <td class="editable-cell" data-key="write-2-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addWriteTableRow('writeTable', 'write')">+ 添加行</button>
+                        <div class="edit-note">💡 点击单元格即可编辑，关键词用英文逗号分隔，自动保存</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 学习计划 -->
+            <div class="section">
+                <div class="section-title">🎓 学习计划</div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">📖 学习内容</div>
+                    <div class="subsection-content">
+                        <table id="studyTable">
+                            <thead>
+                                <tr>
+                                    <th>学习科目</th>
+                                    <th>学习目标</th>
+                                    <th>时间安排</th>
+                                    <th style="width: 60px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="study-0-subject">待填写</td>
+                                    <td class="editable-cell" data-key="study-0-goal">待填写</td>
+                                    <td class="editable-cell" data-key="study-0-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="study-1-subject">待填写</td>
+                                    <td class="editable-cell" data-key="study-1-goal">待填写</td>
+                                    <td class="editable-cell" data-key="study-1-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="study-2-subject">待填写</td>
+                                    <td class="editable-cell" data-key="study-2-goal">待填写</td>
+                                    <td class="editable-cell" data-key="study-2-time">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addSimpleTableRow('studyTable', 'study', ['科目', '目标', '时间'])">+ 添加行</button>
+                        <div class="edit-note">💡 点击单元格即可编辑，自动保存</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 工作Offer计划 -->
+            <div class="section">
+                <div class="section-title">💼 工作Offer计划</div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">🏢 业界机会</div>
+                    <div class="subsection-content">
+                        <table id="industryTable">
+                            <thead>
+                                <tr>
+                                    <th>公司/职位</th>
+                                    <th>职位描述</th>
+                                    <th>联系方式/备注</th>
+                                    <th style="width: 60px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="industry-0-company">待填写</td>
+                                    <td class="editable-cell" data-key="industry-0-desc">待填写</td>
+                                    <td class="editable-cell" data-key="industry-0-contact">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="industry-1-company">待填写</td>
+                                    <td class="editable-cell" data-key="industry-1-desc">待填写</td>
+                                    <td class="editable-cell" data-key="industry-1-contact">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="industry-2-company">待填写</td>
+                                    <td class="editable-cell" data-key="industry-2-desc">待填写</td>
+                                    <td class="editable-cell" data-key="industry-2-contact">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addSimpleTableRow('industryTable', 'industry', ['公司', '描述', '联系'])">+ 添加行</button>
+                        <div class="edit-note">💡 点击单元格即可编辑，自动保存</div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">🎓 学界机会</div>
+                    <div class="subsection-content">
+                        <table id="academicTable">
+                            <thead>
+                                <tr>
+                                    <th>学校/职位</th>
+                                    <th>职位描述</th>
+                                    <th>联系方式/备注</th>
+                                    <th style="width: 60px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="academic-0-school">待填写</td>
+                                    <td class="editable-cell" data-key="academic-0-desc">待填写</td>
+                                    <td class="editable-cell" data-key="academic-0-contact">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="academic-1-school">待填写</td>
+                                    <td class="editable-cell" data-key="academic-1-desc">待填写</td>
+                                    <td class="editable-cell" data-key="academic-1-contact">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="academic-2-school">待填写</td>
+                                    <td class="editable-cell" data-key="academic-2-desc">待填写</td>
+                                    <td class="editable-cell" data-key="academic-2-contact">待填写</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">删除</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addSimpleTableRow('academicTable', 'academic', ['学校', '描述', '联系'])">+ 添加行</button>
+                        <div class="edit-note">💡 点击单元格即可编辑，自动保存</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // 语言切换
+        function switchLanguage(lang) {
+            if (lang === 'en') {
+                window.location.href = '2026_plan_en.html';
+            } else {
+                // 更新按钮状态
+                const buttons = document.querySelectorAll('button[onclick^="switchLanguage"]');
+                buttons.forEach(btn => btn.style.background = 'rgba(255,255,255,0.2)');
+                buttons[0].style.background = 'white';
+                buttons[0].style.color = '#667eea';
+            }
+        }
+        
+        // 初始化可编辑功能
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            initEditableCells();
+        });
+        
+        // 加载保存的数据
+        function loadData() {
+            const savedData = localStorage.getItem('plan2026');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.keys(data).forEach(key => {
+                    const element = document.querySelector(`[data-key="${key}"]`);
+                    if (element) {
+                        element.textContent = data[key];
+                    }
+                });
+            }
+        }
+        
+        // 保存数据
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                const key = cell.getAttribute('data-key');
+                if (key) {
+                    data[key] = cell.textContent;
+                }
+            });
+            
+            // 保存关键词数据
+            document.querySelectorAll('.keywords[data-key]').forEach(keywords => {
+                const key = keywords.getAttribute('data-key');
+                const tags = Array.from(keywords.querySelectorAll('.keyword-tag')).map(tag => tag.textContent).join(',');
+                data[key] = tags;
+            });
+            
+            localStorage.setItem('plan2026', JSON.stringify(data));
+            showSaveIndicator();
+        }
+        
+        // 显示保存提示
+        function showSaveIndicator() {
+            const indicator = document.querySelector('.auto-save-indicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+        
+        // 初始化可编辑单元格
+        function initEditableCells() {
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                cell.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    editCell(this);
+                });
+            });
+        }
+        
+        // 编辑单元格
+        function editCell(cell) {
+            if (cell.classList.contains('editing')) return;
+            
+            const originalContent = cell.textContent;
+            const isSelect = cell.getAttribute('data-type') === 'select';
+            const key = cell.getAttribute('data-key');
+            
+            cell.classList.add('editing');
+            cell.innerHTML = '';
+            
+            let input;
+            if (isSelect) {
+                input = document.createElement('select');
+                const options = ['Edition','一审Under Review', '二审Under Review', '一审结束', '二审结束'];
+                options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.textContent = opt;
+                    if (opt === originalContent) option.selected = true;
+                    input.appendChild(option);
+                });
+            } else if (key && key.includes('keyword')) {
+                input = document.createElement('textarea');
+                input.value = originalContent;
+            } else {
+                input = document.createElement('input');
+                input.type = 'text';
+                input.value = originalContent;
+            }
+            
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = 'edit-buttons';
+            
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'save-btn';
+            saveBtn.textContent = '保存';
+            saveBtn.onclick = () => saveCell(cell, input.value, key, isSelect);
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'cancel-btn';
+            cancelBtn.textContent = '取消';
+            cancelBtn.onclick = () => cancelEdit(cell, originalContent);
+            
+            cell.appendChild(input);
+            buttonDiv.appendChild(saveBtn);
+            buttonDiv.appendChild(cancelBtn);
+            cell.appendChild(buttonDiv);
+            
+            input.focus();
+        }
+        
+        // 保存单元格
+        function saveCell(cell, value, key, isSelect) {
+            cell.classList.remove('editing');
+            
+            if (isSelect) {
+                const statuses = {
+                    'Edition': 'status-edition',
+                    '一审Under Review': 'status-review-1',
+                    '二审Under Review': 'status-review-2',
+                    '一审结束': 'status-review-1-done',
+                    '二审结束': 'status-review-2-done'
+                };
+                cell.innerHTML = `<span class="status-badge ${statuses[value]}">${value}</span>`;
+            } else if (key && key.includes('keyword')) {
+                // 处理关键词
+                const keywords = value.split(',').map(k => k.trim()).filter(k => k);
+                cell.innerHTML = keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('');
+            } else {
+                cell.textContent = value;
+            }
+            
+            saveData();
+        }
+        
+        // 取消编辑
+        function cancelEdit(cell, originalContent) {
+            cell.classList.remove('editing');
+            cell.textContent = originalContent;
+        }
+        
+        // 删除行
+        function deleteRow(button) {
+            try {
+                const row = button.closest('tr');
+                if (!row) {
+                    console.error('未找到行元素');
+                    return;
+                }
+                
+                // 获取该行的所有data-key属性
+                const keysToDelete = [];
+                row.querySelectorAll('[data-key]').forEach(cell => {
+                    const key = cell.getAttribute('data-key');
+                    if (key) {
+                        keysToDelete.push(key);
+                    }
+                });
+                
+                console.log('要删除的键:', keysToDelete);
+                
+                // 从localStorage中删除这些键
+                const savedData = localStorage.getItem('plan2026');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    keysToDelete.forEach(key => {
+                        delete data[key];
+                    });
+                    localStorage.setItem('plan2026', JSON.stringify(data));
+                }
+                
+                // 从DOM中删除行
+                row.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    row.remove();
+                    showSaveIndicator();
+                }, 300);
+            } catch(error) {
+                console.error('删除行时出错:', error);
+            }
+        }
+        
+        // 添加简单表格行（通用函数）
+        function addSimpleTableRow(tableId, prefix, columnTypes) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            
+            const newRow = document.createElement('tr');
+            const suffixes = ['0', '1', '2']; // 对应不同表格的字段后缀
+            
+            if (prefix === 'study') {
+                suffixes = ['subject', 'goal', 'time'];
+            } else if (prefix === 'industry') {
+                suffixes = ['company', 'desc', 'contact'];
+            } else if (prefix === 'academic') {
+                suffixes = ['school', 'desc', 'contact'];
+            }
+            
+            suffixes.forEach(suffix => {
+                const td = document.createElement('td');
+                td.innerHTML = `<span class="editable-cell" data-key="${prefix}-${rowCount}-${suffix}">待填写</span>`;
+                newRow.appendChild(td);
+            });
+            
+            // 添加删除按钮列
+            const actionTd = document.createElement('td');
+            actionTd.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">删除</button>`;
+            newRow.appendChild(actionTd);
+            
+            tbody.appendChild(newRow);
+            initEditableCells();
+        }
+        
+        // 添加表格行（普通表格）
+        function addTableRow(tableId, prefix) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            
+            const newRow = document.createElement('tr');
+            const newRow_data = {
+                'modify': [
+                    { key: `${prefix}-${rowCount}-name`, content: '待填写' },
+                    { key: `${prefix}-${rowCount}-status`, content: '一审Under Review', type: 'select' },
+                    { key: `${prefix}-${rowCount}-time`, content: '待填写' }
+                ],
+                'write': [
+                    { 
+                        key: `${prefix}-${rowCount}-name`, 
+                        content: '<div><strong class="editable-cell" data-key="' + prefix + '-' + rowCount + '-name">待填写</strong></div><div class="editable-cell highlight" data-key="' + prefix + '-' + rowCount + '-highlight">高亮内容示例</div><div class="keywords" data-key="' + prefix + '-' + rowCount + '-keywords"><span class="keyword-tag">关键词1</span></div></div>' 
+                    }
+                ]
+            };
+            
+            if (prefix === 'modify') {
+                newRow_data['modify'].forEach(item => {
+                    const td = document.createElement('td');
+                    if (item.type === 'select') {
+                        td.innerHTML = `<span class="editable-cell status-badge status-review-1" data-key="${item.key}" data-type="select">${item.content}</span>`;
+                    } else {
+                        td.innerHTML = `<span class="editable-cell" data-key="${item.key}">${item.content}</span>`;
+                    }
+                    newRow.appendChild(td);
+                });
+            }
+            
+            // 添加删除按钮列
+            const actionTd = document.createElement('td');
+            actionTd.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">删除</button>`;
+            newRow.appendChild(actionTd);
+            
+            tbody.appendChild(newRow);
+            initEditableCells();
+        }
+        
+        // 添加论文撰写表格行
+        function addWriteTableRow(tableId, prefix) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            
+            const newRow = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.innerHTML = `
+                <div><strong class="editable-cell" data-key="${prefix}-${rowCount}-name">待填写</strong></div>
+                <div class="editable-cell highlight" data-key="${prefix}-${rowCount}-highlight">高亮内容示例</div>
+                <div class="keywords" data-key="${prefix}-${rowCount}-keywords">
+                    <span class="keyword-tag">关键词1</span>
+                </div>
+            `;
+            
+            const timeCell = document.createElement('td');
+            timeCell.innerHTML = `<span class="editable-cell" data-key="${prefix}-${rowCount}-time">待填写</span>`;
+            
+            // 添加删除按钮列
+            const actionCell = document.createElement('td');
+            actionCell.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">删除</button>`;
+            
+            newRow.appendChild(nameCell);
+            newRow.appendChild(timeCell);
+            newRow.appendChild(actionCell);
+            tbody.appendChild(newRow);
+            initEditableCells();
+        }
+    </script>
+</body>
+</html>

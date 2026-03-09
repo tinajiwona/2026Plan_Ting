@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Plan Schedule</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+        
+        .subsection {
+            margin-left: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+        
+        .subsection-title {
+            font-size: 1.3em;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .subsection-content {
+            color: #555;
+            line-height: 1.8;
+            font-size: 0.95em;
+        }
+        
+        .subsection-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .subsection-content li {
+            margin-bottom: 8px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .subsection-content li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .edit-note {
+            color: #999;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.95em;
+            table-layout: fixed;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+            word-wrap: break-word;
+            min-height: 50px;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        #modifyTable th:nth-child(1) {
+            width: 30%;
+        }
+        
+        #modifyTable th:nth-child(2) {
+            width: 25%;
+        }
+        
+        #modifyTable th:nth-child(3) {
+            width: 30%;
+        }
+        
+        #modifyTable th:nth-child(4) {
+            width: 15%;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .status-review-1 {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-review-2 {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-review-1-done {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-review-2-done {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .highlight {
+            display: inline-block;
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin: 4px 4px 4px 0;
+            font-size: 0.9em;
+        }
+        
+        .keywords {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background: #e7f3ff;
+            padding: 4px 8px;
+            border-radius: 3px;
+            margin-right: 8px;
+            margin-bottom: 4px;
+            color: #0066cc;
+        }
+        
+        .editable-cell {
+            cursor: pointer;
+            position: relative;
+            min-height: 20px;
+        }
+        
+        .editable-cell:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 3px;
+        }
+        
+        .editable-cell.editing {
+            background: white;
+        }
+        
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #667eea;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .edit-buttons {
+            margin-top: 8px;
+        }
+        
+        .edit-buttons button {
+            padding: 6px 12px;
+            margin-right: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .save-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background: #5568d3;
+        }
+        
+        .cancel-btn {
+            background: #999;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: #777;
+        }
+        
+        .add-row-btn {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .add-row-btn:hover {
+            background: #218838;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: 5px;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auto-save-indicator.show {
+            display: block;
+            animation: fadeInOut 2s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.4em;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Language Switcher -->
+        <div class="header">
+            <div class="header-content">
+                <h1>📋 2026 Plan Schedule</h1>
+                <p>Let's plan a wonderful 2026 together -TingJiang</p>
+            </div>
+            <div class="language-switcher">
+                <button class="lang-btn" onclick="switchLanguage('en')">English</button>
+                <button class="lang-btn" onclick="switchLanguage('zh')">中文</button>
+            </div>
+        </div>
+        
+        <!-- Auto-save Indicator -->
+        <div class="auto-save-indicator">✓ Auto-saved</div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            
+            <!-- Paper Plans -->
+            <div class="section">
+                <div class="section-title">📚 Paper Plans</div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">📝 Paper Revision Plan</div>
+                    <div class="subsection-content">
+                        <table id="modifyTable">
+                            <thead>
+                                <tr>
+                                    <th>Paper Title</th>
+                                    <th>Status</th>
+                                    <th>Timeline</th>
+                                    <th style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="modify-0-name">To fill</td>
+                                    <td><span class="editable-cell status-badge status-review-1" data-key="modify-0-status" data-type="select">Review Round 1</span></td>
+                                    <td class="editable-cell" data-key="modify-0-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="modify-1-name">To fill</td>
+                                    <td><span class="editable-cell status-badge status-review-2" data-key="modify-1-status" data-type="select">Review Round 2</span></td>
+                                    <td class="editable-cell" data-key="modify-1-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="modify-2-name">To fill</td>
+                                    <td><span class="editable-cell status-badge status-review-1-done" data-key="modify-2-status" data-type="select">Round 1 Complete</span></td>
+                                    <td class="editable-cell" data-key="modify-2-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addTableRow('modifyTable', 'modify')">+ Add Row</button>
+                        <div class="edit-note">💡 Click to edit | Status options: Review Round 1, Review Round 2, Round 1 Complete, Round 2 Complete</div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">✍️ Paper Writing Plan</div>
+                    <div class="subsection-content">
+                        <table id="writeTable">
+                            <thead>
+                                <tr>
+                                    <th>Paper Title & Keywords</th>
+                                    <th>Timeline</th>
+                                    <th style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div><strong class="editable-cell" data-key="write-0-name">To fill</strong></div>
+                                        <div class="editable-cell highlight" data-key="write-0-highlight">Highlight example</div>
+                                        <div class="keywords" data-key="write-0-keywords">
+                                            <span class="keyword-tag">keyword1</span>
+                                            <span class="keyword-tag">keyword2</span>
+                                            <span class="keyword-tag">keyword3</span>
+                                        </div>
+                                    </td>
+                                    <td class="editable-cell" data-key="write-0-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><strong class="editable-cell" data-key="write-1-name">To fill</strong></div>
+                                        <div class="editable-cell highlight" data-key="write-1-highlight">Highlight example</div>
+                                        <div class="keywords" data-key="write-1-keywords">
+                                            <span class="keyword-tag">keyword1</span>
+                                            <span class="keyword-tag">keyword2</span>
+                                            <span class="keyword-tag">keyword3</span>
+                                        </div>
+                                    </td>
+                                    <td class="editable-cell" data-key="write-1-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div><strong class="editable-cell" data-key="write-2-name">To fill</strong></div>
+                                        <div class="editable-cell highlight" data-key="write-2-highlight">Highlight example</div>
+                                        <div class="keywords" data-key="write-2-keywords">
+                                            <span class="keyword-tag">keyword1</span>
+                                            <span class="keyword-tag">keyword2</span>
+                                            <span class="keyword-tag">keyword3</span>
+                                        </div>
+                                    </td>
+                                    <td class="editable-cell" data-key="write-2-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addWriteTableRow('writeTable', 'write')">+ Add Row</button>
+                        <div class="edit-note">💡 Separate keywords by comma | Auto-save enabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Learning Plan -->
+            <div class="section">
+                <div class="section-title">🎓 Learning Plan</div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">📖 Learning Content</div>
+                    <div class="subsection-content">
+                        <table id="studyTable">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Goal</th>
+                                    <th>Timeline</th>
+                                    <th style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="study-0-subject">To fill</td>
+                                    <td class="editable-cell" data-key="study-0-goal">To fill</td>
+                                    <td class="editable-cell" data-key="study-0-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="study-1-subject">To fill</td>
+                                    <td class="editable-cell" data-key="study-1-goal">To fill</td>
+                                    <td class="editable-cell" data-key="study-1-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="study-2-subject">To fill</td>
+                                    <td class="editable-cell" data-key="study-2-goal">To fill</td>
+                                    <td class="editable-cell" data-key="study-2-time">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addSimpleTableRow('studyTable', 'study', ['Subject', 'Goal', 'Timeline'])">+ Add Row</button>
+                        <div class="edit-note">💡 Click to edit | Auto-save enabled</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Job Offers Plan -->
+            <div class="section">
+                <div class="section-title">💼 Job Offers Plan</div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">🏢 Industry Opportunities</div>
+                    <div class="subsection-content">
+                        <table id="industryTable">
+                            <thead>
+                                <tr>
+                                    <th>Company/Position</th>
+                                    <th>Job Description</th>
+                                    <th>Contact/Notes</th>
+                                    <th style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="industry-0-company">To fill</td>
+                                    <td class="editable-cell" data-key="industry-0-desc">To fill</td>
+                                    <td class="editable-cell" data-key="industry-0-contact">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="industry-1-company">To fill</td>
+                                    <td class="editable-cell" data-key="industry-1-desc">To fill</td>
+                                    <td class="editable-cell" data-key="industry-1-contact">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="industry-2-company">To fill</td>
+                                    <td class="editable-cell" data-key="industry-2-desc">To fill</td>
+                                    <td class="editable-cell" data-key="industry-2-contact">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addSimpleTableRow('industryTable', 'industry', ['Company', 'Description', 'Contact'])">+ Add Row</button>
+                        <div class="edit-note">💡 Click to edit | Auto-save enabled</div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <div class="subsection-title">🎓 Academic Opportunities</div>
+                    <div class="subsection-content">
+                        <table id="academicTable">
+                            <thead>
+                                <tr>
+                                    <th>University/Position</th>
+                                    <th>Job Description</th>
+                                    <th>Contact/Notes</th>
+                                    <th style="width: 60px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="editable-cell" data-key="academic-0-school">To fill</td>
+                                    <td class="editable-cell" data-key="academic-0-desc">To fill</td>
+                                    <td class="editable-cell" data-key="academic-0-contact">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="academic-1-school">To fill</td>
+                                    <td class="editable-cell" data-key="academic-1-desc">To fill</td>
+                                    <td class="editable-cell" data-key="academic-1-contact">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="editable-cell" data-key="academic-2-school">To fill</td>
+                                    <td class="editable-cell" data-key="academic-2-desc">To fill</td>
+                                    <td class="editable-cell" data-key="academic-2-contact">To fill</td>
+                                    <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addSimpleTableRow('academicTable', 'academic', ['University', 'Description', 'Contact'])">+ Add Row</button>
+                        <div class="edit-note">💡 Click to edit | Auto-save enabled</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Language switching - redirect to Chinese version
+        function switchLanguage(lang) {
+            if (lang === 'zh') {
+                window.location.href = '2026_plan.html';
+            }
+            // If already in English version, just update buttons
+            const buttons = document.querySelectorAll('.lang-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`button[onclick="switchLanguage('${lang}')"]`).classList.add('active');
+        }
+        
+        // Mark English as active on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector("button[onclick=\"switchLanguage('en')\"]").classList.add('active');
+            loadData();
+            initEditableCells();
+        });
+        
+        // Load saved data
+        function loadData() {
+            // 优先加载英文版本的数据
+            let savedData = localStorage.getItem('plan2026_en');
+            
+            // 如果没有英文版数据，则尝试从中文版复制
+            if (!savedData) {
+                const chineseData = localStorage.getItem('plan2026');
+                if (chineseData) {
+                    localStorage.setItem('plan2026_en', chineseData);
+                    savedData = chineseData;
+                }
+            }
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.keys(data).forEach(key => {
+                    const element = document.querySelector(`[data-key="${key}"]`);
+                    if (element) {
+                        element.textContent = data[key];
+                    }
+                });
+            }
+        }
+        
+        // Save data
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                const key = cell.getAttribute('data-key');
+                if (key) {
+                    data[key] = cell.textContent;
+                }
+            });
+            
+            // Save keywords data
+            document.querySelectorAll('.keywords[data-key]').forEach(keywords => {
+                const key = keywords.getAttribute('data-key');
+                const tags = Array.from(keywords.querySelectorAll('.keyword-tag')).map(tag => tag.textContent).join(',');
+                data[key] = tags;
+            });
+            
+            localStorage.setItem('plan2026_en', JSON.stringify(data));
+            // 同时同步到中文版本
+            localStorage.setItem('plan2026', JSON.stringify(data));
+            showSaveIndicator();
+        }
+        
+        // Show save indicator
+        function showSaveIndicator() {
+            const indicator = document.querySelector('.auto-save-indicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Initialize editable cells
+        function initEditableCells() {
+            document.querySelectorAll('.editable-cell').forEach(cell => {
+                cell.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    editCell(this);
+                });
+            });
+        }
+        
+        // Edit cell
+        function editCell(cell) {
+            if (cell.classList.contains('editing')) return;
+            
+            const originalContent = cell.textContent;
+            const isSelect = cell.getAttribute('data-type') === 'select';
+            const key = cell.getAttribute('data-key');
+            
+            cell.classList.add('editing');
+            cell.innerHTML = '';
+            
+            let input;
+            if (isSelect) {
+                input = document.createElement('select');
+                const options = ['Review Round 1', 'Review Round 2', 'Round 1 Complete', 'Round 2 Complete'];
+                options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.textContent = opt;
+                    if (opt === originalContent) option.selected = true;
+                    input.appendChild(option);
+                });
+            } else if (key && key.includes('keyword')) {
+                input = document.createElement('textarea');
+                input.value = originalContent;
+            } else {
+                input = document.createElement('input');
+                input.type = 'text';
+                input.value = originalContent;
+            }
+            
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = 'edit-buttons';
+            
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'save-btn';
+            saveBtn.textContent = 'Save';
+            saveBtn.onclick = () => saveCell(cell, input.value, key, isSelect);
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'cancel-btn';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.onclick = () => cancelEdit(cell, originalContent);
+            
+            cell.appendChild(input);
+            buttonDiv.appendChild(saveBtn);
+            buttonDiv.appendChild(cancelBtn);
+            cell.appendChild(buttonDiv);
+            
+            input.focus();
+        }
+        
+        // Save cell
+        function saveCell(cell, value, key, isSelect) {
+            cell.classList.remove('editing');
+            
+            if (isSelect) {
+                const statuses = {
+                    'Review Round 1': 'status-review-1',
+                    'Review Round 2': 'status-review-2',
+                    'Round 1 Complete': 'status-review-1-done',
+                    'Round 2 Complete': 'status-review-2-done'
+                };
+                cell.innerHTML = `<span class="status-badge ${statuses[value]}">${value}</span>`;
+            } else if (key && key.includes('keyword')) {
+                const keywords = value.split(',').map(k => k.trim()).filter(k => k);
+                cell.innerHTML = keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('');
+            } else {
+                cell.textContent = value;
+            }
+            
+            saveData();
+        }
+        
+        // Cancel edit
+        function cancelEdit(cell, originalContent) {
+            cell.classList.remove('editing');
+            cell.textContent = originalContent;
+        }
+        
+        // Delete row
+        function deleteRow(button) {
+            try {
+                const row = button.closest('tr');
+                if (!row) {
+                    console.error('Row element not found');
+                    return;
+                }
+                
+                const keysToDelete = [];
+                row.querySelectorAll('[data-key]').forEach(cell => {
+                    const key = cell.getAttribute('data-key');
+                    if (key) {
+                        keysToDelete.push(key);
+                    }
+                });
+                
+                // Delete from both English and Chinese storage
+                ['plan2026_en', 'plan2026'].forEach(storageKey => {
+                    const savedData = localStorage.getItem(storageKey);
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        keysToDelete.forEach(key => {
+                            delete data[key];
+                        });
+                        localStorage.setItem(storageKey, JSON.stringify(data));
+                    }
+                });
+                
+                row.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => {
+                    row.remove();
+                    showSaveIndicator();
+                }, 300);
+            } catch(error) {
+                console.error('Error deleting row:', error);
+            }
+        }
+        
+        // Add simple table row
+        function addSimpleTableRow(tableId, prefix, columnTypes) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            
+            const newRow = document.createElement('tr');
+            const suffixes = ['0', '1', '2'];
+            
+            if (prefix === 'study') {
+                suffixes = ['subject', 'goal', 'time'];
+            } else if (prefix === 'industry') {
+                suffixes = ['company', 'desc', 'contact'];
+            } else if (prefix === 'academic') {
+                suffixes = ['school', 'desc', 'contact'];
+            }
+            
+            suffixes.forEach(suffix => {
+                const td = document.createElement('td');
+                td.innerHTML = `<span class="editable-cell" data-key="${prefix}-${rowCount}-${suffix}">To fill</span>`;
+                newRow.appendChild(td);
+            });
+            
+            const actionTd = document.createElement('td');
+            actionTd.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">Delete</button>`;
+            newRow.appendChild(actionTd);
+            
+            tbody.appendChild(newRow);
+            initEditableCells();
+        }
+        
+        // Add table row
+        function addTableRow(tableId, prefix) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            
+            const newRow = document.createElement('tr');
+            const newRow_data = {
+                'modify': [
+                    { key: `${prefix}-${rowCount}-name`, content: 'To fill' },
+                    { key: `${prefix}-${rowCount}-status`, content: 'Review Round 1', type: 'select' },
+                    { key: `${prefix}-${rowCount}-time`, content: 'To fill' }
+                ]
+            };
+            
+            if (prefix === 'modify') {
+                newRow_data['modify'].forEach(item => {
+                    const td = document.createElement('td');
+                    if (item.type === 'select') {
+                        td.innerHTML = `<span class="editable-cell status-badge status-review-1" data-key="${item.key}" data-type="select">${item.content}</span>`;
+                    } else {
+                        td.innerHTML = `<span class="editable-cell" data-key="${item.key}">${item.content}</span>`;
+                    }
+                    newRow.appendChild(td);
+                });
+            }
+            
+            const actionTd = document.createElement('td');
+            actionTd.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">Delete</button>`;
+            newRow.appendChild(actionTd);
+            
+            tbody.appendChild(newRow);
+            initEditableCells();
+        }
+        
+        // Add write table row
+        function addWriteTableRow(tableId, prefix) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rowCount = tbody.querySelectorAll('tr').length;
+            
+            const newRow = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.innerHTML = `
+                <div><strong class="editable-cell" data-key="${prefix}-${rowCount}-name">To fill</strong></div>
+                <div class="editable-cell highlight" data-key="${prefix}-${rowCount}-highlight">Highlight example</div>
+                <div class="keywords" data-key="${prefix}-${rowCount}-keywords">
+                    <span class="keyword-tag">keyword1</span>
+                </div>
+            `;
+            
+            const timeCell = document.createElement('td');
+            timeCell.innerHTML = `<span class="editable-cell" data-key="${prefix}-${rowCount}-time">To fill</span>`;
+            
+            const actionCell = document.createElement('td');
+            actionCell.innerHTML = `<button class="delete-btn" onclick="deleteRow(this)">Delete</button>`;
+            
+            newRow.appendChild(nameCell);
+            newRow.appendChild(timeCell);
+            newRow.appendChild(actionCell);
+            tbody.appendChild(newRow);
+            initEditableCells();
+        }
+    </script>
+</body>
+</html>
